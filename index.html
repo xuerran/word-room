@@ -23,14 +23,14 @@
 <div class="shell">
   <header class="topbar"><div class="brand"><div class="mark">Aa</div><span>词语练习室</span></div><span class="top-note">中英双向 · 随机默写</span></header>
   <div class="heading"><div><h1 id="title">编辑两位学生的词库</h1><p id="subtitle">每位学生一份词库，修改后发送新的专属链接。</p></div><div class="tabs" id="viewTabs"><button id="editTab" class="active" type="button">编辑词库</button><button id="previewTab" type="button">预览练习</button></div></div>
-  <div class="student-picker" id="studentPicker"><span>当前学生</span><button id="studentA" class="active" type="button">学生 A</button><button id="studentB" type="button">学生 B</button></div>
+  <div class="student-picker" id="studentPicker"><span>当前学生</span><button id="studentA" class="active" type="button">叮当</button><button id="studentB" type="button">可乐</button></div>
   <div class="student-picker hidden" id="practicePicker"><span>练习范围</span><button id="todayMode" class="active" type="button">今日新词</button><button id="allMode" type="button">累计复习</button></div>
   <main id="editorView" class="grid">
     <section class="panel main-panel editor"><div class="editor-title"><h2>今日新词</h2><span id="editorCount" class="pill">0 组词</span></div><p class="help">每行一组：<strong>英文, 中文</strong>。多个正确译法用“/”分开，例如 <strong>experience, 经历/经验</strong>。可选填例句：<strong>apple, 苹果 | I eat an apple. | 我吃一个苹果。</strong></p><textarea id="todayInput" aria-label="今日新词" spellcheck="false"></textarea><h2 style="margin-top:24px">累计词库</h2><p class="help">旧词保留在这里；更新时，今日新词会自动并入。需要改错或删除时可直接编辑。</p><textarea id="allInput" aria-label="累计词库" spellcheck="false"></textarea><div class="actions"><button id="applyBank" class="primary" type="button">更新两个题库</button><button id="clearInput" class="secondary" type="button">清空今日新词</button></div><p id="editorNotice" class="notice" aria-live="polite">页面刷新后，编辑区会恢复示例。请保留学生链接以便下次导入。</p><div class="box"><h3>分享给家长</h3><p>链接包含这位学生的今日新词和累计词库。修改后需要重新发送新链接。</p><div class="import-row"><input id="shareLink" aria-label="学生专属链接" readonly><button id="copyLink" class="secondary" type="button">复制链接</button></div><p id="shareNotice" class="notice" aria-live="polite"></p></div><div class="box"><h3>继续编辑以前的词库</h3><p>粘贴以前的学生链接，即可导入并修改。</p><div class="import-row"><input id="importLink" aria-label="以前的学生链接" placeholder="粘贴旧链接"><button id="importBank" class="secondary" type="button">导入</button></div><p id="importNotice" class="notice" aria-live="polite"></p></div></section>
     <aside class="panel side-panel"><h2>录入提示</h2><p class="side-copy">每天先导入上次的链接，再替换“今日新词”。点击更新后，新词会进入累计词库。</p><p class="side-copy">可一次粘贴多行；空行会忽略，重复词组只保留一组。多个译法可用斜杠分开。</p><div class="line"></div><p class="side-copy">学生打开专属链接后，可选择今日新词或累计复习。词库和成绩不会上传到云端。</p></aside>
   </main>
   <main id="quizView" class="grid hidden">
-    <section class="panel main-panel"><div id="questionView"><div class="eyebrow" id="studentLabel">学生 A 的练习</div><div class="question-top"><span id="questionNumber">第 1 题</span><span id="direction" class="badge">英译中</span></div><div class="track"><div id="progressFill" class="fill"></div></div><div id="promptLabel" class="prompt-label">请写出对应的中文</div><div id="prompt" class="prompt"></div><button id="speakPrompt" class="speak" type="button">🔊 朗读题目</button><label class="answer-label" for="answer">你的答案</label><form id="answerForm" class="answer-row"><input id="answer" type="text" autocomplete="off" spellcheck="false" placeholder="在这里输入答案" required><button id="checkAnswer" class="primary" type="submit">检查答案</button></form><div id="feedback" class="feedback" aria-live="polite"></div><div id="example" class="example hidden"><strong>例句</strong><p id="exampleEnglish"></p><p id="exampleChinese" class="zh"></p><button id="speakExample" class="speak" type="button">🔊 朗读例句</button></div><div class="next-row"><button id="nextQuestion" class="secondary hidden" type="button">下一题</button><button id="skipQuestion" class="secondary" type="button">跳过此题</button></div></div><div id="finishView" class="finish hidden"><h2>这一轮完成啦！</h2><p id="finishSummary"></p><div class="finish-actions"><button id="retryWrong" class="primary hidden" type="button">再练错词</button><button id="restart" class="secondary" type="button">重新练一轮</button></div></div><div id="emptyView" class="finish hidden"><h2>词库还没有内容</h2><p>请让老师先录入词语，再发送练习链接。</p></div></section>
+    <section class="panel main-panel"><div id="questionView"><div class="eyebrow" id="studentLabel">叮当的练习</div><div class="question-top"><span id="questionNumber">第 1 题</span><span id="direction" class="badge">英译中</span></div><div class="track"><div id="progressFill" class="fill"></div></div><div id="promptLabel" class="prompt-label">请写出对应的中文</div><div id="prompt" class="prompt"></div><button id="speakPrompt" class="speak" type="button">🔊 朗读题目</button><label class="answer-label" for="answer">你的答案</label><form id="answerForm" class="answer-row"><input id="answer" type="text" autocomplete="off" spellcheck="false" placeholder="在这里输入答案" required><button id="checkAnswer" class="primary" type="submit">检查答案</button></form><div id="feedback" class="feedback" aria-live="polite"></div><div id="example" class="example hidden"><strong>例句</strong><p id="exampleEnglish"></p><p id="exampleChinese" class="zh"></p><button id="speakExample" class="speak" type="button">🔊 朗读例句</button></div><div class="next-row"><button id="nextQuestion" class="secondary hidden" type="button">下一题</button><button id="skipQuestion" class="secondary" type="button">跳过此题</button></div></div><div id="finishView" class="finish hidden"><h2>这一轮完成啦！</h2><p id="finishSummary"></p><div class="finish-actions"><button id="retryWrong" class="primary hidden" type="button">再练错词</button><button id="restart" class="secondary" type="button">重新练一轮</button></div></div><div id="emptyView" class="finish hidden"><h2>词库还没有内容</h2><p>请让老师先录入词语，再发送练习链接。</p></div></section>
     <aside class="panel side-panel"><h2>本轮反馈</h2><div class="stats"><div class="stat"><span>已作答</span><strong id="answeredStat">0</strong></div><div class="stat"><span>答对</span><strong id="correctStat">0</strong></div><div class="stat"><span>正确率</span><strong id="accuracyStat">0%</strong></div><div class="stat"><span>平均用时</span><strong id="averageStat">0秒</strong></div></div><div class="line"></div><h2>本轮错词</h2><div id="wrongList" class="wrong-list"><span class="muted">还没有错词</span></div><p class="side-copy">答错后可在本轮结束时再练一次。刷新页面后，本轮反馈会清空。</p></aside>
   </main>
   <footer class="footer">词语练习室 · 不保存个人答题记录</footer>
@@ -55,6 +55,7 @@
   const sample = Object.fromEntries(Object.entries(sampleWords).map(([student,items])=>[student,{today:items,all:items}]));
   const state = {banks:sample,student:'a',practice:'today',shared:false,view:'edit',deck:[],index:0,answered:0,correct:0,totalSeconds:0,startedAt:0,pausedAt:0,pausedTotal:0,locked:false,wrong:new Map(),current:null};
   const show=(id,on)=>$(id).classList.toggle('hidden',!on);
+  const studentName=()=>({a:'叮当',b:'可乐'})[state.student];
   const studentBank=()=>state.banks[state.student];
   const bank=()=>studentBank()[state.practice];
   const itemKey=item=>item.en.toLowerCase()+'|'+item.zh;
@@ -103,11 +104,11 @@
   function alternatives(text){return text.split(/[\/／;；、]/).map(x=>x.trim()).filter(Boolean)}
   function updateStudent(){
     $('studentA').classList.toggle('active',state.student==='a');$('studentB').classList.toggle('active',state.student==='b');
-    $('studentLabel').textContent=`学生 ${state.student.toUpperCase()} · ${state.practice==='today'?'今日新词':'累计复习'}`;
+    $('studentLabel').textContent=`${studentName()} · ${state.practice==='today'?'今日新词':'累计复习'}`;
     $('todayInput').value=studentBank().today.map(displayItem).join('\n');
     $('allInput').value=studentBank().all.map(displayItem).join('\n');
     $('editorCount').textContent=`今日 ${studentBank().today.length} 组 · 累计 ${studentBank().all.length} 组`;
-    $('editorNotice').textContent=`当前是学生 ${state.student.toUpperCase()} 的词库。修改后记得发送新链接。`;
+    $('editorNotice').textContent=`当前是${studentName()}的词库。修改后记得发送新链接。`;
     updateLink();startRound(bank());
   }
   function updateLink(){
@@ -128,7 +129,7 @@
     state.practice=value;
     $('todayMode').classList.toggle('active',value==='today');
     $('allMode').classList.toggle('active',value==='all');
-    $('studentLabel').textContent=`学生 ${state.student.toUpperCase()} · ${value==='today'?'今日新词':'累计复习'}`;
+    $('studentLabel').textContent=`${studentName()} · ${value==='today'?'今日新词':'累计复习'}`;
     startRound(bank());
   }
   function setStats(){
@@ -205,7 +206,7 @@
     const merged=new Map(all.items.map(x=>[x.en.toLowerCase(),x]));
     today.items.forEach(x=>merged.set(x.en.toLowerCase(),x));
     state.banks[state.student]={today:today.items,all:[...merged.values()]};
-    updateStudent();$('editorNotice').className='notice';$('editorNotice').textContent=`已更新学生 ${state.student.toUpperCase()}：今日 ${today.items.length} 组，累计 ${merged.size} 组。请复制新链接。`;
+    updateStudent();$('editorNotice').className='notice';$('editorNotice').textContent=`已更新${studentName()}：今日 ${today.items.length} 组，累计 ${merged.size} 组。请复制新链接。`;
   });
   $('clearInput').addEventListener('click',()=>{$('todayInput').value='';$('todayInput').focus()});
   $('copyLink').addEventListener('click',async()=>{
@@ -213,7 +214,7 @@
     catch{$('shareLink').select();$('shareNotice').textContent='请手动复制选中的链接。'}
   });
   $('importBank').addEventListener('click',()=>{
-    try{const url=new URL($('importLink').value.trim());if(!url.hash.startsWith('#bank='))throw Error('invalid');const payload=decode(url.hash.slice(6));state.banks[payload.student]=payload.bank;state.student=payload.student;updateStudent();$('importNotice').textContent=`已导入学生 ${state.student.toUpperCase()} 的词库。`}
+    try{const url=new URL($('importLink').value.trim());if(!url.hash.startsWith('#bank='))throw Error('invalid');const payload=decode(url.hash.slice(6));state.banks[payload.student]=payload.bank;state.student=payload.student;updateStudent();$('importNotice').textContent=`已导入${studentName()}的词库。`}
     catch{$('importNotice').textContent='链接格式不正确，请粘贴以前发送的学生链接。'}
   });
   $('answerForm').addEventListener('submit',event=>{event.preventDefault();check($('answer').value)});
@@ -225,7 +226,7 @@
   $('speakExample').addEventListener('click',()=>{if(state.current?.exampleEn)speak(state.current.exampleEn,'en-US')});
   document.addEventListener('visibilitychange',()=>{if(!state.current||state.locked)return;const now=performance.now();if(document.hidden)state.pausedAt=now;else if(state.pausedAt){state.pausedTotal+=now-state.pausedAt;state.pausedAt=0}});
   if(location.hash.startsWith('#bank=')){
-    try{const payload=decode(location.hash.slice(6));state.banks[payload.student]=payload.bank;state.student=payload.student;state.shared=true;state.view='quiz';show('viewTabs',false);show('studentPicker',false);show('practicePicker',true);show('editorView',false);show('quizView',true);$('title').textContent=`学生 ${state.student.toUpperCase()} 的词语练习`;$('subtitle').textContent='选择今日新词或累计复习，写出对应译文。'}
+    try{const payload=decode(location.hash.slice(6));state.banks[payload.student]=payload.bank;state.student=payload.student;state.shared=true;state.view='quiz';show('viewTabs',false);show('studentPicker',false);show('practicePicker',true);show('editorView',false);show('quizView',true);$('title').textContent=`${studentName()}的词语练习`;$('subtitle').textContent='选择今日新词或累计复习，写出对应译文。'}
     catch{$('title').textContent='链接无法读取';$('subtitle').textContent='请让老师重新发送学生练习链接。';state.banks.a={today:[],all:[]};state.student='a';state.shared=true;state.view='quiz';show('viewTabs',false);show('studentPicker',false);show('practicePicker',true);show('editorView',false);show('quizView',true)}
   }
   updateStudent();
