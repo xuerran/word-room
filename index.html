@@ -30,9 +30,10 @@
     <aside class="panel side-panel"><h2>录入提示</h2><p class="side-copy">每天先导入上次的链接，再替换“今日新词”。点击更新后，新词会进入累计词库。</p><p class="side-copy">可一次粘贴多行；空行会忽略，重复词组只保留一组。多个译法可用斜杠分开。</p><div class="line"></div><p class="side-copy">学生打开专属链接后，可选择今日新词或累计复习。词库和成绩不会上传到云端。</p></aside>
   </main>
   <main id="quizView" class="grid hidden">
-    <section class="panel main-panel"><div id="questionView"><div class="eyebrow" id="studentLabel">叮当的练习</div><div class="question-top"><span id="questionNumber">第 1 题</span><span id="direction" class="badge">英译中</span></div><div class="track"><div id="progressFill" class="fill"></div></div><div id="promptLabel" class="prompt-label">请写出对应的中文</div><div id="prompt" class="prompt"></div><button id="speakPrompt" class="speak" type="button">🔊 朗读题目</button><label class="answer-label" for="answer">你的答案</label><form id="answerForm" class="answer-row"><input id="answer" type="text" autocomplete="off" spellcheck="false" placeholder="在这里输入答案" required><button id="checkAnswer" class="primary" type="submit">检查答案</button></form><div id="feedback" class="feedback" aria-live="polite"></div><div id="example" class="example hidden"><strong>例句</strong><p id="exampleEnglish"></p><p id="exampleChinese" class="zh"></p><button id="speakExample" class="speak" type="button">🔊 朗读例句</button></div><div class="next-row"><button id="nextQuestion" class="secondary hidden" type="button">下一题</button><button id="skipQuestion" class="secondary" type="button">跳过此题</button></div></div><div id="finishView" class="finish hidden"><h2>这一轮完成啦！</h2><p id="finishSummary"></p><div class="finish-actions"><button id="retryWrong" class="primary hidden" type="button">再练错词</button><button id="restart" class="secondary" type="button">重新练一轮</button></div></div><div id="emptyView" class="finish hidden"><h2>词库还没有内容</h2><p>请让老师先录入词语，再发送练习链接。</p></div></section>
+    <section class="panel main-panel"><div id="questionView"><div class="eyebrow" id="studentLabel">叮当的练习</div><div class="question-top"><span id="questionNumber">第 1 题</span><span id="direction" class="badge">英译中</span></div><div class="track"><div id="progressFill" class="fill"></div></div><div id="promptLabel" class="prompt-label">请写出对应的中文</div><div id="prompt" class="prompt"></div><button id="speakPrompt" class="speak" type="button">🔊 朗读题目</button><p id="speechStatus" class="notice" role="status" aria-live="polite"></p><label class="answer-label" for="answer">你的答案</label><form id="answerForm" class="answer-row"><input id="answer" type="text" autocomplete="off" spellcheck="false" placeholder="在这里输入答案" required><button id="checkAnswer" class="primary" type="submit">检查答案</button></form><div id="feedback" class="feedback" aria-live="polite"></div><div id="example" class="example hidden"><strong>例句</strong><p id="exampleEnglish"></p><p id="exampleChinese" class="zh"></p><button id="speakExample" class="speak" type="button">🔊 朗读例句</button><p id="exampleSpeechStatus" class="notice" role="status" aria-live="polite"></p></div><div class="next-row"><button id="nextQuestion" class="secondary hidden" type="button">下一题</button><button id="skipQuestion" class="secondary" type="button">跳过此题</button></div></div><div id="finishView" class="finish hidden"><h2>这一轮完成啦！</h2><p id="finishSummary"></p><div class="finish-actions"><button id="retryWrong" class="primary hidden" type="button">再练错词</button><button id="restart" class="secondary" type="button">重新练一轮</button></div></div><div id="emptyView" class="finish hidden"><h2>词库还没有内容</h2><p>请让老师先录入词语，再发送练习链接。</p></div></section>
     <aside class="panel side-panel"><h2>本轮反馈</h2><div class="stats"><div class="stat"><span>已作答</span><strong id="answeredStat">0</strong></div><div class="stat"><span>答对</span><strong id="correctStat">0</strong></div><div class="stat"><span>正确率</span><strong id="accuracyStat">0%</strong></div><div class="stat"><span>平均用时</span><strong id="averageStat">0秒</strong></div></div><div class="line"></div><h2>本轮错词</h2><div id="wrongList" class="wrong-list"><span class="muted">还没有错词</span></div><p class="side-copy">答错后可在本轮结束时再练一次。刷新页面后，本轮反馈会清空。</p></aside>
   </main>
+  <section id="linkErrorView" class="panel main-panel hidden"><h2>需要核对完整的学生链接</h2><p class="side-copy">这不代表词库为空。链接可能不完整，或生成时出现了问题。</p><p class="side-copy">请将收到的整条链接复制给老师核对，包括 #bank= 后面的全部内容。老师重新生成链接后，请完整复制并单独发送。</p></section>
   <footer class="footer">词语练习室 · 不保存个人答题记录</footer>
 </div>
 <script>
@@ -53,13 +54,14 @@
     ]
   };
   const sample = Object.fromEntries(Object.entries(sampleWords).map(([student,items])=>[student,{today:items,all:items}]));
-  const state = {banks:sample,student:'a',practice:'today',shared:false,view:'edit',deck:[],index:0,answered:0,correct:0,totalSeconds:0,startedAt:0,pausedAt:0,pausedTotal:0,locked:false,wrong:new Map(),current:null};
+  const state = {banks:sample,student:'a',practice:'today',shared:false,view:'edit',deck:[],index:0,answered:0,correct:0,totalSeconds:0,startedAt:0,pausedAt:0,pausedTotal:0,locked:false,wrong:new Map(),current:null,linkError:false};
   const show=(id,on)=>$(id).classList.toggle('hidden',!on);
   const studentName=()=>({a:'叮当',b:'可乐'})[state.student];
   const studentBank=()=>state.banks[state.student];
   const bank=()=>studentBank()[state.practice];
   const itemKey=item=>item.en.toLowerCase()+'|'+item.zh;
   const displayItem=item=>`${item.en}, ${item.zh}${item.exampleEn?` | ${item.exampleEn} | ${item.exampleZh}`:''}`;
+  const MAX_WORDS=500,MAX_FIELD_LENGTH=500;
   function parseBank(raw){
     const items=[],errors=[],seen=new Set();
     raw.split(/\r?\n/).forEach((rawLine,index)=>{
@@ -69,7 +71,7 @@
       if(!match||(parts.length!==1&&parts.length!==3)||(parts.length===3&&(!parts[1]||!parts[2]))){errors.push(index+1);return}
       const item={en:match[1].trim(),zh:match[2].trim()};
       if(!item.en||!item.zh||item.en.length>100||item.zh.length>100){errors.push(index+1);return}
-      if(parts.length===3){item.exampleEn=parts[1];item.exampleZh=parts[2]}
+      if(parts.length===3){if(parts[1].length>MAX_FIELD_LENGTH||parts[2].length>MAX_FIELD_LENGTH){errors.push(index+1);return}item.exampleEn=parts[1];item.exampleZh=parts[2]}
       const key=itemKey(item);if(!seen.has(key)){items.push(item);seen.add(key)}
     });
     return {items,errors};
@@ -82,13 +84,19 @@
     bytes.forEach(x=>binary+=String.fromCharCode(x));
     return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   }
+  function readSharedBank(url){
+    const fragment=decodeURIComponent(url.hash.slice(1));
+    const match=fragment.match(/^bank=([A-Za-z0-9_-]+={0,2})(?:[?&][\s\S]*)?$/);
+    if(!match)throw Error('invalid');
+    return decode(match[1]);
+  }
   function decode(value){
     const base=value.replace(/-/g,'+').replace(/_/g,'/');
     const bytes=Uint8Array.from(atob(base),c=>c.charCodeAt(0));
     const payload=JSON.parse(new TextDecoder().decode(bytes));
-    if(payload?.v!==2||!['a','b'].includes(payload.s)||!Array.isArray(payload.w)||payload.w.length>500||!Array.isArray(payload.t))throw Error('invalid');
+    if(payload?.v!==2||!['a','b'].includes(payload.s)||!Array.isArray(payload.w)||payload.w.length>MAX_WORDS||!Array.isArray(payload.t))throw Error('invalid');
     const all=payload.w.map(row=>{
-      if(!Array.isArray(row)||row.length!==4||row.some(x=>typeof x!=='string'||x.length>500)||!row[0]||!row[1])throw Error('invalid');
+      if(!Array.isArray(row)||row.length!==4||row.some(x=>typeof x!=='string'||x.length>MAX_FIELD_LENGTH)||!row[0]||!row[1])throw Error('invalid');
       return {en:row[0],zh:row[1],exampleEn:row[2],exampleZh:row[3]};
     });
     if(payload.t.some(i=>!Number.isInteger(i)||i<0||i>=all.length))throw Error('invalid');
@@ -145,6 +153,7 @@
     state.totalSeconds=0;state.wrong=new Map();renderQuestion();
   }
   function renderQuestion(){
+    stopSpeech();
     setStats();show('questionView',false);show('finishView',false);show('emptyView',false);state.current=null;
     if(!state.deck.length){show('emptyView',true);return}
     if(state.index>=state.deck.length){
@@ -190,9 +199,47 @@
     $('nextQuestion').textContent=state.index===state.deck.length-1?'查看结果':'下一题';$('nextQuestion').focus();
     return {correct,expected,seconds};
   }
-  function speak(text,lang){
-    if(!('speechSynthesis'in window)){$('feedback').textContent='当前浏览器不支持朗读。';return}
-    speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(text);utterance.lang=lang;utterance.rate=lang==='en-US'?.84:1;speechSynthesis.speak(utterance);
+  let activeSpeech=null,speechTimer=null,availableVoices=[];
+  const synth=window.speechSynthesis;
+  function loadVoices(){try{availableVoices=synth?.getVoices()||[]}catch{availableVoices=[]}}
+  loadVoices();
+  synth?.addEventListener?.('voiceschanged',loadVoices);
+  function stopSpeech(){
+    const previous=activeSpeech;activeSpeech=null;clearTimeout(speechTimer);
+    if(previous){try{synth.cancel()}catch{}}
+    $('speechStatus').textContent='';$('exampleSpeechStatus').textContent='';
+  }
+  function speak(text,lang,statusId='speechStatus'){
+    stopSpeech();const status=$(statusId);
+    if(!synth||typeof SpeechSynthesisUtterance==='undefined'){status.textContent='此浏览器未提供朗读，请用 Safari 或 Chrome 打开。';return}
+    loadVoices();
+    const language=lang.toLowerCase(),prefix=language.split('-')[0];
+    const candidates=availableVoices.filter(v=>v.lang.toLowerCase().replace(/_/g,'-').split('-')[0]===prefix);
+    candidates.sort((a,b)=>(Number(b.localService)*2+Number(b.lang.toLowerCase()===language))-(Number(a.localService)*2+Number(a.lang.toLowerCase()===language)));
+    const utterance=new SpeechSynthesisUtterance(text);activeSpeech=utterance;
+    utterance.lang=lang;utterance.rate=lang==='en-US'?.84:1;utterance.volume=1;
+    if(candidates[0]){utterance.voice=candidates[0];utterance.lang=candidates[0].lang}
+    status.textContent='正在准备朗读…';
+    utterance.onstart=()=>{if(activeSpeech!==utterance)return;clearTimeout(speechTimer);status.textContent='正在朗读；若听不到，请检查媒体音量和蓝牙输出。'};
+    utterance.onend=()=>{if(activeSpeech!==utterance)return;clearTimeout(speechTimer);activeSpeech=null;status.textContent='朗读结束，可再次点击播放。'};
+    utterance.onerror=event=>{
+      if(activeSpeech!==utterance)return;clearTimeout(speechTimer);activeSpeech=null;
+      const messages={
+        'language-unavailable':'手机缺少此语言的语音，请在系统的文字转语音设置中下载相应语音。',
+        'voice-unavailable':'所选语音不可用，请检查手机的文字转语音设置后重试。',
+        'synthesis-unavailable':'手机的朗读服务不可用，请检查系统的文字转语音设置，或换浏览器尝试。',
+        'not-allowed':'浏览器未允许朗读，请再次点击朗读按钮，或用 Safari / Chrome 打开。',
+        'network':'语音服务连接失败，请检查网络后重试。',
+        'audio-hardware':'音频输出不可用，请检查耳机或扬声器后重试。'
+      };
+      status.textContent=messages[event.error]||'朗读未完成，请检查媒体音量、手机的文字转语音设置，或换浏览器尝试。';
+    };
+    speechTimer=setTimeout(()=>{
+      if(activeSpeech!==utterance)return;activeSpeech=null;
+      try{synth.cancel()}catch{}
+      status.textContent='朗读未能启动。请在手机设置中搜索“文字转语音”并试听；若系统也无声，需先启用对应语言的语音。';
+    },7000);
+    try{if(synth.paused)synth.resume();synth.speak(utterance)}catch{utterance.onerror({error:'synthesis-unavailable'})}
   }
   $('studentA').addEventListener('click',()=>{state.student='a';updateStudent()});
   $('studentB').addEventListener('click',()=>{state.student='b';updateStudent()});
@@ -202,11 +249,16 @@
   $('previewTab').addEventListener('click',()=>setView('quiz'));
   $('applyBank').addEventListener('click',()=>{
     const today=parseBank($('todayInput').value),all=parseBank($('allInput').value);
-    if(today.errors.length||all.errors.length){$('editorNotice').className='notice error';$('editorNotice').textContent=`格式不正确：${today.errors.length?'今日新词第 '+today.errors.join('、')+' 行；':''}${all.errors.length?'累计词库第 '+all.errors.join('、')+' 行':''}。请按“英文, 中文”填写。`;return}
+    if(today.errors.length||all.errors.length){$('editorNotice').className='notice error';$('editorNotice').textContent=`格式不正确：${today.errors.length?'今日新词第 '+today.errors.join('、')+' 行；':''}${all.errors.length?'累计词库第 '+all.errors.join('、')+' 行':''}。请按“英文, 中文”填写；每条例句最多 500 个字符。`;return}
+    const originalTodayCount=today.items.length;
+    today.items=[...new Map(today.items.map(x=>[x.en.toLowerCase(),x])).values()];
     const merged=new Map(all.items.map(x=>[x.en.toLowerCase(),x]));
     today.items.forEach(x=>merged.set(x.en.toLowerCase(),x));
-    state.banks[state.student]={today:today.items,all:[...merged.values()]};
-    updateStudent();$('editorNotice').className='notice';$('editorNotice').textContent=`已更新${studentName()}：今日 ${today.items.length} 组，累计 ${merged.size} 组。请复制新链接。`;
+    if(merged.size>MAX_WORDS){$('editorNotice').className='notice error';$('editorNotice').textContent='累计词库最多支持 '+MAX_WORDS+' 个单词，请减少后再更新。当前词库与链接未改动。';return}
+    const candidate={today:today.items,all:[...merged.values()]};
+    try{decode(encode({student:state.student,bank:candidate}))}catch{$('editorNotice').className='notice error';$('editorNotice').textContent='未能生成有效链接，请检查词库内容。当前词库与链接未改动。';return}
+    state.banks[state.student]=candidate;
+    updateStudent();$('editorNotice').className='notice';$('editorNotice').textContent=`已更新${studentName()}：今日 ${today.items.length} 组，累计 ${merged.size} 组。${originalTodayCount>today.items.length?'重复英文已按最后一行保留；多个译法请用 / 合并。':''}请复制新链接。`;
   });
   $('clearInput').addEventListener('click',()=>{$('todayInput').value='';$('todayInput').focus()});
   $('copyLink').addEventListener('click',async()=>{
@@ -214,7 +266,7 @@
     catch{$('shareLink').select();$('shareNotice').textContent='请手动复制选中的链接。'}
   });
   $('importBank').addEventListener('click',()=>{
-    try{const url=new URL($('importLink').value.trim());if(!url.hash.startsWith('#bank='))throw Error('invalid');const payload=decode(url.hash.slice(6));state.banks[payload.student]=payload.bank;state.student=payload.student;updateStudent();$('importNotice').textContent=`已导入${studentName()}的词库。`}
+    try{const url=new URL($('importLink').value.trim());const payload=readSharedBank(url);state.banks[payload.student]=payload.bank;state.student=payload.student;updateStudent();$('importNotice').textContent=`已导入${studentName()}的词库。`}
     catch{$('importNotice').textContent='链接格式不正确，请粘贴以前发送的学生链接。'}
   });
   $('answerForm').addEventListener('submit',event=>{event.preventDefault();check($('answer').value)});
@@ -223,13 +275,13 @@
   $('retryWrong').addEventListener('click',()=>startRound([...state.wrong.values()]));
   $('restart').addEventListener('click',()=>startRound(bank()));
   $('speakPrompt').addEventListener('click',()=>{const item=state.current;if(item)speak(item.reverse?item.zh:item.en,item.reverse?'zh-CN':'en-US')});
-  $('speakExample').addEventListener('click',()=>{if(state.current?.exampleEn)speak(state.current.exampleEn,'en-US')});
+  $('speakExample').addEventListener('click',()=>{if(state.current?.exampleEn)speak(state.current.exampleEn,'en-US','exampleSpeechStatus')});
   document.addEventListener('visibilitychange',()=>{if(!state.current||state.locked)return;const now=performance.now();if(document.hidden)state.pausedAt=now;else if(state.pausedAt){state.pausedTotal+=now-state.pausedAt;state.pausedAt=0}});
-  if(location.hash.startsWith('#bank=')){
-    try{const payload=decode(location.hash.slice(6));state.banks[payload.student]=payload.bank;state.student=payload.student;state.shared=true;state.view='quiz';show('viewTabs',false);show('studentPicker',false);show('practicePicker',true);show('editorView',false);show('quizView',true);$('title').textContent=`${studentName()}的词语练习`;$('subtitle').textContent='选择今日新词或累计复习，写出对应译文。'}
-    catch{$('title').textContent='链接无法读取';$('subtitle').textContent='请让老师重新发送学生练习链接。';state.banks.a={today:[],all:[]};state.student='a';state.shared=true;state.view='quiz';show('viewTabs',false);show('studentPicker',false);show('practicePicker',true);show('editorView',false);show('quizView',true)}
+  if(/^#bank(?:=|%3d)/i.test(location.hash)){
+    try{const payload=readSharedBank(new URL(location.href));state.banks[payload.student]=payload.bank;state.student=payload.student;state.shared=true;state.view='quiz';show('viewTabs',false);show('studentPicker',false);show('practicePicker',true);show('editorView',false);show('quizView',true);$('title').textContent=`${studentName()}的词语练习`;$('subtitle').textContent='选择今日新词或累计复习，写出对应译文。'}
+    catch{state.linkError=true;state.shared=true;$('title').textContent='链接无法读取';$('subtitle').textContent='词库未能从链接中载入，请联系老师核对原链接。';show('viewTabs',false);show('studentPicker',false);show('practicePicker',false);show('editorView',false);show('quizView',false);show('linkErrorView',true)}
   }
-  updateStudent();
+  if(!state.linkError)updateStudent();
   if(document.modelContext?.registerTool){
     const register=tool=>{try{Promise.resolve(document.modelContext.registerTool(tool)).catch(()=>{})}catch{}};
     register({name:'submit_translation',title:'提交翻译答案',description:'提交当前题目的译文并返回对错、参考答案和本题用时。',inputSchema:{type:'object',properties:{answer:{type:'string'}},required:['answer'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){if(typeof input?.answer!=='string'||!input.answer.trim())throw Error('请输入答案');const result=check(input.answer);if(!result)throw Error('当前没有待作答的题目');return result}});
